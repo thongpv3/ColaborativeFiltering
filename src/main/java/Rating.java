@@ -6,6 +6,12 @@ public class Rating {
     private int iId;
     private double rate;
 
+    static int maxRate = 5;
+
+    public static void setMaxRate(int maxRate) {
+        Rating.maxRate = maxRate;
+    }
+
     public Rating(int uId, int iId, double rate) {
         this.uId = uId;
         this.iId = iId;
@@ -21,7 +27,7 @@ public class Rating {
     }
 
     public double rate() {
-        return rate();
+        return rate;
     }
 
     @Override

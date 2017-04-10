@@ -36,8 +36,11 @@ public class DataSet<T> {
     }
 
     public void forEach(Consumer<T> doWork) {
-        for (T it:dataSet) {
-            doWork.accept(it);
-        }
+        dataSet.forEach(doWork);
     }
+
+    Stream<T> stream() {
+        return dataSet.stream();
+    }
+
 }
