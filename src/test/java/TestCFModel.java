@@ -2,7 +2,7 @@
  * Created by thongpv87 on 10/04/2017.
  */
 public class TestCFModel {
-    private static String FILE_PATH = "/home/thongpv87/IdeaProjects/ColaborativeFiltering/src/test/java/debug-set/tests.csv";
+    private static String FILE_PATH = "/home/thongpv3/IdeaProjects/ColaborativeFiltering/src/test/java/debug-set/tests.csv";
 
     public static void main(String[] args) {
         DataSet<Rating> dataSet = new DataSet<>();

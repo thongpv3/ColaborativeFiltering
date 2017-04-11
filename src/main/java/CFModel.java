@@ -1,15 +1,9 @@
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimap;
-import org.apache.spark.ml.linalg.DenseMatrix;
-import org.apache.spark.ml.linalg.Matrix;
-import org.la4j.vector.DenseVector;
-import org.la4j.vector.dense.BasicVector;
 
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by thongpv87 on 10/04/2017.
@@ -20,22 +14,21 @@ public class CFModel {
     private static final int THREAD_COUNT = Runtime.getRuntime().availableProcessors();
 
     private ListMultimap<Integer, Pair<Integer, Double>> simMatrix;
-    private ListMultimap<Integer, Pair<Integer, Double>> ratings;
+    private HashMap<Pair<Integer, Integer>, Double> ratings;
+    private HashMap<Pair<Integer, Integer>, Double> predicted;
     private int similars;
     ListMultimap<Integer, Integer> ratedList;
 
-    private CFModel(ListMultimap<Integer, Pair<Integer, Double>> simMatrix, ListMultimap<Integer, Pair<Integer, Double>> ratings, int similars) {
+    private CFModel(ListMultimap<Integer, Pair<Integer, Double>> simMatrix, HashMap<Pair<Integer, Integer>, Double> ratings, int similars) {
         this.simMatrix = simMatrix;
         this.ratings = ratings;
         this.similars = similars;
-
+        this.predicted = new HashMap<>();
 
         //Cached rated list
         ratedList = ArrayListMultimap.create();
-        ratings.keySet().forEach((key)->{
-            ratings.get(key).forEach((p)->{
-                ratedList.put(p.t1(), key);
-            });
+        ratings.keySet().stream().forEach((key)->{
+            ratedList.put(key.t2(), key.t1());
         });
     }
 
@@ -52,9 +45,6 @@ public class CFModel {
                 OptionalDouble avg = ratings.get(key).stream().mapToDouble((t) -> {
                     return t.t2();
                 }).average();
-
-                //print out computed avg values, just for debug
-//                System.out.println(key + " - " +avg.getAsDouble());
 
                 if (avg.isPresent()) {
                     ratings.get(key).stream().forEach(t -> {
@@ -74,21 +64,12 @@ public class CFModel {
                 e.printStackTrace();
             }
         });
-        //just for debug - get all standardization rating of key = 1 corresponding to user 1 with movie-rating pairs
-        ratings.keySet().forEach((key) -> {
-                    System.out.println("Key " + key + ":");
-                    ratings.get(key).forEach((t) -> {
-                        System.out.println(t.t1() + " - " + t.t2());
-                    });
-                }
-        );
-        System.out.println();
 
 
         //PHASE 2 - COMPUTE SIMILARITY MATRIX
         ListMultimap<Integer, Pair<Integer, Double>> simMatrix = ArrayListMultimap.create();
         tasks.clear();
-        //we can't use vector because of user Id can be spare
+        //we can't use vector because of user Id can be spared
 
         ratings.keySet().forEach((key1) -> {
             tasks.add(() -> {
@@ -147,17 +128,18 @@ public class CFModel {
                 e.printStackTrace();
             }
         });
-//        //just for test - print out simMatrix
-//        simMatrix.get(1).forEach((pair) -> {
-//            System.out.println(pair.t1() + " - " + pair.t2());
-//        });
-
-        ratings.clear();
-        dataSet.stream().forEach(r -> ratings.put(r.user(), new Pair<Integer, Double>(r.item(), r.rate())));
-        return new CFModel(simMatrix, ratings, similars);
+        HashMap<Pair<Integer, Integer>, Double> rts = new HashMap<>();
+        dataSet.stream().forEach(r -> rts.put(new Pair<Integer, Integer>(r.user(), r.item()), new Double(r.rate())));
+        return new CFModel(simMatrix, rts, similars);
     }
 
     public double predict(int uId, int mId) {
+        Pair<Integer, Integer> pair = new Pair<>(uId, mId);
+        Double result;
+        result = (ratings.get(pair) != null) ?  ratings.get(pair) :  predicted.get(pair);
+        if (result != null)
+            return result.doubleValue();
+
         List<Pair<Integer, Double>> sims = simMatrix.get(uId).stream().filter((p)->{
             return ratedList.get(mId).contains(p.t1());
         }).sorted((p1, p2)->{
@@ -172,33 +154,12 @@ public class CFModel {
         double P = 0.0;
         for (Pair<Integer, Double> p : sims) {
             S += p.t2();
-            Optional<Pair<Integer, Double>> rate = ratings.get(p.t1()).stream().filter((p2)->{
-                return p2.t1() == mId;
-            }).findFirst();
-            if (!rate.isPresent()) {
-                System.err.println("Unexpected logic error");
-                System.exit(1);
-            }
-            P += rate.get().t2()*p.t2().doubleValue();
+            double rate = ratings.get(new Pair<Integer, Integer>(p.t1(), mId));
+            P += rate*p.t2().doubleValue();
 
         }
-//        double sumRate = sims.mapToDouble((p)->{
-//            Optional<Pair<Integer, Double>> rate = ratings.get(p.t1()).stream().filter((p2)->{
-//                return p2.t1() == mId;
-//            }).findFirst();
-//            if (!rate.isPresent()) {
-//                System.err.println("Unexpected logic error");
-//                System.exit(1);
-//            }
-//            return rate.get().t2() * p.t2();
-//        }).sum();
-//
-//        double sumSim = sims.mapToDouble((p)->{
-//            return p.t2();
-//        }).sum();
-
-        if (S == 0)
-            return 0;
-        return P/S;
+        result = (S==0) ? 0 : P/S;
+        predicted.put(pair, result);
+        return result.doubleValue();
     }
 }
