@@ -1,0 +1,18 @@
+gCách dùng:
+
+cosine_similarity 
+calculate_rmse "path/to/result"
+
+cosine_similarity chỉ dùng để tính vector similarity, còn calculate_rmse dùng để đánh giá sai số.
+
+Code ví dụ cách dùng xem ở example
+
+Mọi người kiểm tra xem tính sai ở chỗ nào, thứ tự tính gồm các bước:
+	- chuẩn hóa.
+	- tính similarity matrix
+	- Ước lượng.
+	- đánh giá sai số.
+
+Để xem ma trận chuẩn hóa có thể disp(StandardMatrix) ở trong cosine_similarity để xem rồi so sánh với kết quả của code. 
+
+Theo như mình thấy hiện tại thì similarity matrix không sai, đánh giá sai số không sai. Ước lượng hình như cũng không sai nhưng không hiểu sao rmse lại cao thế. rmse của giải thuật này với cái test này lần trước mình chạy chỉ rơi vào khoảng 0,91-0.98

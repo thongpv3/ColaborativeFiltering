@@ -63,7 +63,7 @@ public class CFModel {
             data.set(r.user(), r.item(), r.rate());
         });
 
-//        Utils.printMatrix(data);
+        Utils.printMatrix(data);
         //todo parallel
         //PHASE 1 - STANDARDIZATION
         for (int i = 0; i < data.rows(); i++) {
