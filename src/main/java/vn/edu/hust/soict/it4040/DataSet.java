@@ -1,4 +1,4 @@
-package vn.edu.hust.soict.it4040.CosineSimilarity;
+package vn.edu.hust.soict.it4040;
 
 import java.io.IOException;
 import java.nio.file.Files;

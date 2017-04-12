@@ -1,4 +1,4 @@
-package vn.edu.hust.soict.it4040.CosineSimilarity;
+package vn.edu.hust.soict.it4040;
 
 /**
  * Created by thongpv87 on 10/04/2017.
@@ -29,7 +29,7 @@ public class Item {
         return id;
     }
 
-    int compare(Item i2) {
+    public int compare(Item i2) {
         if (i2 == null)
             return 1;
         return id-i2.id;

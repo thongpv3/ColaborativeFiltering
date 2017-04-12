@@ -1,8 +1,5 @@
 package vn.edu.hust.soict.it4040;
 
-import vn.edu.hust.soict.it4040.CosineSimilarity.DataSet;
-import vn.edu.hust.soict.it4040.CosineSimilarity.Rating;
-
 /**
  * Created by thongpv87 on 10/04/2017.
  */

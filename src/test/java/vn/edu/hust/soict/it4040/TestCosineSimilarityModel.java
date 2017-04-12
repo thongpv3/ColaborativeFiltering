@@ -1,19 +1,16 @@
 package vn.edu.hust.soict.it4040;
 
-import vn.edu.hust.soict.it4040.CosineSimilarity.CFModel;
-import vn.edu.hust.soict.it4040.CosineSimilarity.Rating;
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 
 /**
- * Created by thongpv87 on 10/04/2017.
+ * Created by thongpv87 on 12/04/2017.
  */
-public class TestCFModel {
-    private static String TRAIN_SET = "/home/thongpv3/IdeaProjects/ColaborativeFiltering/src/test/java/data/ml-100k/u1.base";
-    private static String TEST_SET = "/home/thongpv3/IdeaProjects/ColaborativeFiltering/src/test/java/data/ml-100k/u1.test";
+public class TestCosineSimilarityModel {
+    private static String TRAIN_SET = "/home/thongpv87/IdeaProjects/ColaborativeFiltering/src/test/java/data/ml-100k/u1.base";
+    private static String TEST_SET = "/home/thongpv87/IdeaProjects/ColaborativeFiltering/src/test/java/data/ml-100k/u1.test";
     private static String RESULT_OUTPUT = "/home/thongpv87/IdeaProjects/ColaborativeFiltering/src/test/java/result/ml-100k1.result";
 
     private static void test1() {
@@ -24,27 +21,24 @@ public class TestCFModel {
             return new Rating(Integer.parseInt(sarr[1]), Integer.parseInt(sarr[0]), Double.parseDouble(sarr[2]));
         });
 
-        CFModel model = CFModel.train(ratings, 2);
+        CollaborativeFilteringModel model = RecommendationTrainer.trainCSM(ratings, 2);
         System.out.println(model.predict(1, 5));
     }
 
     private static void test2() {
-        String trainPath = "/home/thongpv87/IdeaProjects/ColaborativeFiltering/src/test/java/data/ml-100k/u2.base";
-        String testPath = "/home/thongpv87/IdeaProjects/ColaborativeFiltering/src/test/java/data/ml-100k/u2.test";
-
         //load train set and test set
         HashSet<Rating> trainSet = new HashSet<>();
         HashSet<Rating> testSet = new HashSet<>();
-        Utils.mapFileIntoSet(trainSet, trainPath, s -> {
+        Utils.mapFileIntoSet(trainSet, TRAIN_SET, s -> {
             String[] sarr = s.split("\\s+"); //regular expression skip space
             return new Rating(Integer.parseInt(sarr[0]), Integer.parseInt(sarr[1]), Double.parseDouble(sarr[2]));
         });
-        Utils.mapFileIntoSet(testSet, testPath, s -> {
+        Utils.mapFileIntoSet(testSet, TEST_SET, s -> {
             String[] sarr = s.split("\\s+");
             return new Rating(Integer.parseInt(sarr[0]), Integer.parseInt(sarr[1]), Double.parseDouble(sarr[2]));
         });
 
-        CFModel model = CFModel.train(trainSet, 5);
+        CollaborativeFilteringModel model = RecommendationTrainer.trainCSM(trainSet, 5);
 
         final DoubleWrapper var = new DoubleWrapper();
 
@@ -76,33 +70,8 @@ public class TestCFModel {
         double rmse = Math.sqrt(var.getValue()/testSet.size());
         System.out.println("Root Mean Squared Error (RMSE): " + rmse);
     }
-
     public static void main(String[] args) {
-        test1();
-//        test2();
-    }
-}
-
-class DoubleWrapper {
-    double value;
-    public DoubleWrapper(double d) {
-        value = d;
-    }
-    public DoubleWrapper() {
-        value = 0;
-    }
-
-    public DoubleWrapper add(double d) {
-        value += d;
-        return this;
-    }
-
-    DoubleWrapper sub(double d) {
-        value -= d;
-        return this;
-    }
-
-    double getValue() {
-        return value;
+//        test1();
+        test2();
     }
 }

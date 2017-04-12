@@ -54,7 +54,7 @@ public class Utils {
                     set.add(data);
             });
         } catch (IOException ex) {
-            System.err.print("Could open file or file format is not valid with your mapToData function");
+            System.err.println("Could open file or file format is not valid with your mapToData function");
         }
     }
 
