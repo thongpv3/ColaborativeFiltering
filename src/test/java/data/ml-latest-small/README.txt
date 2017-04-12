@@ -58,10 +58,10 @@ Formatting and Encoding
 
 The dataset files are written as [comma-separated values](http://en.wikipedia.org/wiki/Comma-separated_values) files with a single header row. Columns that contain commas (`,`) are escaped using double-quotes (`"`). These files are encoded as UTF-8. If accented characters in movie titles or tag values (e.g. Misérables, Les (1995)) display incorrectly, make sure that any program reading the data, such as a text editor, terminal, or script, is configured for UTF-8.
 
-User Ids
+vn.edu.hust.soict.it4040.CosineSimilarity.User Ids
 --------
 
-MovieLens users were selected at random for inclusion. Their ids have been anonymized. User ids are consistent between `ratings.csv` and `tags.csv` (i.e., the same id refers to the same user across the two files).
+MovieLens users were selected at random for inclusion. Their ids have been anonymized. vn.edu.hust.soict.it4040.CosineSimilarity.User ids are consistent between `ratings.csv` and `tags.csv` (i.e., the same id refers to the same user across the two files).
 
 Movie Ids
 ---------

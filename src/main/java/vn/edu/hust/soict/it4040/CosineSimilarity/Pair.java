@@ -1,3 +1,5 @@
+package vn.edu.hust.soict.it4040.CosineSimilarity;
+
 /**
  * Created by thongpv87 on 10/04/2017.
  */
@@ -42,5 +44,10 @@ public class Pair<T1, T2> {
         int result = t1 != null ? t1.hashCode() : 0;
         result = 31 * result + (t2 != null ? t2.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return t1.toString() + " - " + t2.toString();
     }
 }

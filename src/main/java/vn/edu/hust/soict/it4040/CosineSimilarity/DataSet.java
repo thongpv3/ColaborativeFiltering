@@ -1,3 +1,5 @@
+package vn.edu.hust.soict.it4040.CosineSimilarity;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,6 +40,15 @@ public class DataSet<T> {
     public void forEach(Consumer<T> doWork) {
         dataSet.forEach(doWork);
     }
+
+    public T get(int index) {
+        return dataSet.get(index);
+    }
+
+    public int size() {
+        return dataSet.size();
+    }
+
 
     Stream<T> stream() {
         return dataSet.stream();

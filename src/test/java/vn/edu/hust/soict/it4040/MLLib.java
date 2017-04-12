@@ -1,4 +1,4 @@
-/**
+package vn.edu.hust.soict.it4040; /**
  * Created by thongpv87 on 10/04/2017.
  */
 import scala.Tuple2;
