@@ -64,4 +64,11 @@ public class Utils {
             formatStr.append("%"+width+"s");
         System.out.println(String.format(formatStr.toString(), objects));
     }
+
+    public static String prettyFormat(int width, Object... objects) {
+        StringBuilder formatStr = new StringBuilder();
+        for (int i=0; i<objects.length; i++)
+            formatStr.append("%"+width+"s");
+        return String.format(formatStr.toString(), objects);
+    }
 }

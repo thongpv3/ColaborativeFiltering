@@ -63,7 +63,7 @@ public class CFModel {
             data.set(r.user(), r.item(), r.rate());
         });
 
-        Utils.printMatrix(data);
+//        Utils.printMatrix(data);
         //todo parallel
         //PHASE 1 - STANDARDIZATION
         for (int i = 0; i < data.rows(); i++) {
@@ -88,7 +88,7 @@ public class CFModel {
                 data.setRow(i, row);
         }
 
-        Utils.printMatrix(data);
+//        Utils.printMatrix(data);
 
         Matrix simMatrix = new Basic2DMatrix(nUser, nUser);
         for (int i = 0; i < simMatrix.rows(); i++) {
@@ -102,12 +102,15 @@ public class CFModel {
             }
         }
 
-        Utils.printMatrix(simMatrix);
+//        Utils.printMatrix(simMatrix);
 
         //Map simMatrix to other data structure for better performance for predict operation
         ListMultimap<Integer, Pair<Integer, Double>> simInfo = ArrayListMultimap.create();
         final HashSet<User> checkSet = new HashSet<>();
         simMatrix.each((i, j, d) -> {
+            //ignore same user id
+            if (i==j)
+                return;
             //We need to check because of user id can be spare, not continuous
             checkSet.clear();
             checkSet.add(new User(i));
@@ -119,7 +122,7 @@ public class CFModel {
         simInfo.keySet().forEach(
                 (key) -> simInfo.get(key).sort((p1, p2) -> 0 - p1.t2().compareTo(p2.t2())));
 
-        Utils.printMultiMapAsMatrix(simInfo, 30);
+//        Utils.printMultiMapAsMatrix(simInfo, 30);
 
         return new CFModel(userSet, itemSet, trainingSet, simInfo, similars);
     }
