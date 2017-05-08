@@ -5,6 +5,7 @@ package vn.edu.hust.soict.it4040;
  */
 public class Item {
     private int id;
+    private double rdm;
 
     public Item(int id) {
         this.id = id;
@@ -23,6 +24,11 @@ public class Item {
 
         return id == item.id;
     }
+
+    void setRDM(double RDM) {
+        rdm = RDM;
+    }
+
 
     @Override
     public int hashCode() {

@@ -6,6 +6,8 @@ package vn.edu.hust.soict.it4040;
 public class User {
     private int id;
 
+    private double rdu = 0;
+
     public User(int id) {
         this.id = id;
     }
@@ -22,6 +24,10 @@ public class User {
         User user = (User) o;
 
         return id == user.id;
+    }
+
+    void setRDU(double RDU) {
+        this.rdu = RDU;
     }
 
     @Override

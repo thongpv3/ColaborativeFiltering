@@ -1,5 +1,7 @@
 package vn.edu.hust.soict.it4040;
 
+import org.apache.commons.lang.mutable.MutableDouble;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,8 +11,8 @@ import java.util.HashSet;
  * Created by thongpv87 on 12/04/2017.
  */
 public class TestCosineSimilarityModel {
-    private static String TRAIN_SET = "/home/thongpv87/IdeaProjects/ColaborativeFiltering/src/test/java/data/ml-100k/u1.base";
-    private static String TEST_SET = "/home/thongpv87/IdeaProjects/ColaborativeFiltering/src/test/java/data/ml-100k/u1.test";
+    private static String TRAIN_SET = "/home/thongpv87/IdeaProjects/ColaborativeFiltering/src/test/java/data/ml-100k/ub.base";
+    private static String TEST_SET = "/home/thongpv87/IdeaProjects/ColaborativeFiltering/src/test/java/data/ml-100k/ub.test";
     private static String RESULT_OUTPUT = "/home/thongpv87/IdeaProjects/ColaborativeFiltering/src/test/java/result/ml-100k1.result";
 
     private static void test1() {
@@ -38,9 +40,9 @@ public class TestCosineSimilarityModel {
             return new Rating(Integer.parseInt(sarr[0]), Integer.parseInt(sarr[1]), Double.parseDouble(sarr[2]));
         });
 
-        CollaborativeFilteringModel model = RecommendationTrainer.trainCSM(trainSet, 5);
+        CollaborativeFilteringModel model = RecommendationTrainer.trainCSM(trainSet, 10);
 
-        final DoubleWrapper var = new DoubleWrapper();
+        final MutableDouble var = new MutableDouble();
 
         FileOutputStream of;
         try {
@@ -67,7 +69,7 @@ public class TestCosineSimilarityModel {
         }
 
 
-        double rmse = Math.sqrt(var.getValue()/testSet.size());
+        double rmse = Math.sqrt(var.doubleValue()/testSet.size());
         System.out.println("Root Mean Squared Error (RMSE): " + rmse);
     }
     public static void main(String[] args) {

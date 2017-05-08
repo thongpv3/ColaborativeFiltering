@@ -102,7 +102,6 @@ public class RecommendationTrainer {
 //        Utils.printMultiMapAsMatrix(simInfo, 30);
 
         return new CosineSimilarityModel(users, items, ratings, simInfo, similars);
-
     }
 
     public static CollaborativeFilteringModel trainMFM() {
