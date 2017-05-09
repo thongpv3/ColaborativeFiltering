@@ -78,7 +78,8 @@ public class CosineSimilarityModel implements CollaborativeFilteringModel {
             return result;
 
         List<Pair<Integer,Double>> sims = simMatrix.get(user).stream()
-                .filter((p)-> ratedUsersOfItem.get(item).contains(p.t1()))
+                .filter((p)-> (ratedUsersOfItem.get(item).contains(p.t1()) &&
+                                p.t2() >= 0.5))
                 .limit(similars).collect(Collectors.toList());
 
         double bxi = micro + baseXs.getOrDefault(user, micro) - micro + baseYs.getOrDefault(item, micro) - micro;
@@ -92,8 +93,8 @@ public class CosineSimilarityModel implements CollaborativeFilteringModel {
             t += (rate - bxj) * p.t2();
         }
 
-        result = bxi + ((s==0) ? 0 : t/s);
-        //predicted.put...
+        result = bxi + ((s!=0) ? t/s : 0);
+        predicted.put(new Pair<>(user, item), result); //cache predicted rating
         return result;
     }
 
